@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f3f4f6;
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,8 +28,8 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #e5e7eb;
+            color: #1f2937;
             padding: 40px;
             text-align: center;
         }
@@ -101,7 +101,7 @@
 
         .question-number {
             display: inline-block;
-            background: #667eea;
+            background: #1e3a5f;
             color: white;
             width: 28px;
             height: 28px;
@@ -131,7 +131,7 @@
         textarea:focus,
         select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #1e3a5f;
         }
 
         textarea {
@@ -159,7 +159,7 @@
 
         .radio-option:hover,
         .checkbox-option:hover {
-            border-color: #667eea;
+            border-color: #1e3a5f;
             background: #f9fafb;
         }
 
@@ -169,7 +169,7 @@
             cursor: pointer;
             width: 20px;
             height: 20px;
-            accent-color: #667eea;
+            accent-color: #1e3a5f;
         }
 
         .error-message {
@@ -196,7 +196,7 @@
         .submit-button {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1e3a5f;
             color: white;
             border: none;
             border-radius: 8px;
@@ -208,7 +208,7 @@
 
         .submit-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(30, 58, 95, 0.4);
         }
 
         .submit-button:disabled {
@@ -627,19 +627,21 @@
 
             // Collect form data
             const formData = new FormData(form);
-            const responses = {};
-
-            formData.forEach((value, key) => {
-                responses[key] = value;
-            });
-
-            // Add metadata
-            const payload = {
+            const formFields = {
                 template_id: TEMPLATE_ID,
                 opportunity_type: OPPORTUNITY_TYPE,
                 opportunity_subtype: OPPORTUNITY_SUBTYPE,
-                responses: responses,
                 submitted_at: new Date().toISOString()
+            };
+
+            formData.forEach((value, key) => {
+                formFields[key] = value;
+            });
+
+            // Format payload for webhook (expects formName and formData)
+            const payload = {
+                formName: `form_responses_${OPPORTUNITY_TYPE}_${OPPORTUNITY_SUBTYPE}`.toLowerCase().replace(/[^a-z0-9]/g, '_'),
+                formData: formFields
             };
 
             try {
