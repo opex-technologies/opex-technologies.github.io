@@ -221,14 +221,16 @@
             display: none;
             background: #10b981;
             color: white;
-            padding: 20px;
+            padding: 40px;
             border-radius: 8px;
             text-align: center;
             margin-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         .success-message.show {
-            display: block;
+            display: block !important;
         }
 
         .footer {
@@ -645,6 +647,9 @@
             };
 
             try {
+                console.log('Submitting to:', WEBHOOK_URL);
+                console.log('Payload:', JSON.stringify(payload));
+
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: {
@@ -653,15 +658,21 @@
                     body: JSON.stringify(payload)
                 });
 
+                console.log('Response status:', response.status);
+                const responseData = await response.json();
+                console.log('Response data:', responseData);
+
                 if (response.ok) {
+                    console.log('Success! Showing success message...');
                     form.style.display = 'none';
                     successMessage.classList.add('show');
+                    console.log('Success message classes:', successMessage.className);
                 } else {
-                    throw new Error('Submission failed');
+                    throw new Error('Submission failed: ' + JSON.stringify(responseData));
                 }
             } catch (error) {
                 console.error('Error submitting form:', error);
-                alert('There was an error submitting the form. Please try again.');
+                alert('There was an error submitting the form. Please try again.\n\nError: ' + error.message);
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Survey';
             }
