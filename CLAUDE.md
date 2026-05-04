@@ -31,6 +31,16 @@ cd "Q4 form scoring project/frontend/form-builder" && npm run build
 # 2. Deploy to GCS (production)
 gsutil -m cp -r dist/assets/* gs://opex-deployed-forms/form-builder/assets/
 gsutil cp dist/index.html gs://opex-deployed-forms/form-builder/index.html
+# Login is a separate entry. If you skip this, signed-in users keep loading
+# whichever bundle was at /form-builder/login/index.html last time.
+gsutil cp dist/index.html gs://opex-deployed-forms/form-builder/login/index.html
+gsutil setmeta -h "Cache-Control:no-cache, max-age=0" \
+  gs://opex-deployed-forms/form-builder/index.html \
+  gs://opex-deployed-forms/form-builder/login/index.html
+gcloud --project opex-data-lake-k23k4y98m compute url-maps invalidate-cdn-cache opex-forms-lb \
+  --path "/form-builder/index.html" --async
+gcloud --project opex-data-lake-k23k4y98m compute url-maps invalidate-cdn-cache opex-forms-lb \
+  --path "/form-builder/login/index.html" --async
 
 # 3. Deploy to GitHub Pages (secondary)
 cp -r dist/assets/* ~/Documents/opex-technologies/assets/
