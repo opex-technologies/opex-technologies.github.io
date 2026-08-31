@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opex Form Builder</title>
+    <script>
+      // Handle SPA redirect from 404.html for GitHub Pages
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+        var params = new URLSearchParams(location.search);
+        var redirectPath = params.get('redirect');
+        if (redirectPath) {
+          history.replaceState(null, null, redirectPath);
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/form-builder/assets/index-NoFDHSMp.js"></script>
+    <link rel="stylesheet" crossorigin href="/form-builder/assets/index-Dak9mr2q.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
